@@ -24,4 +24,29 @@ variable "internet_gateway_name" {
   default     = "main"
 }
 
+locals {
+  availability_zones_ids   = slice(sort(data.aws_availability_zones.available.zone_ids), 0, 3)
+  availability_zones_names = slice(sort(data.aws_availability_zones.available.names), 0, 3)
 
+  web_cidr                 = cidrsubnet(var.cidr_block, 8, 0)
+  web_private_subnet_cidrs = cidrsubnets(local.web_cidr, 2, 2, 2)
+  web_private_subnets_cidrs_per_availability_zone = {
+    for k, v in local.availability_zones_names :
+    v => { name : v, id : local.availability_zones_ids[k], subnet : local.web_private_subnet_cidrs[k] }
+  }
+
+  application_cidr                 = cidrsubnet(var.cidr_block, 8, 1)
+  application_private_subnet_cidrs = cidrsubnets(local.application_cidr, 2, 2, 2)
+  application_private_subnets_cidrs_per_availability_zone = {
+    for k, v in local.availability_zones_names :
+    v => { name : v, id : local.availability_zones_ids[k], subnet : local.application_private_subnet_cidrs[k] }
+  }
+
+  database_cidr                 = cidrsubnet(var.cidr_block, 8, 2)
+  database_private_subnet_cidrs = cidrsubnets(local.database_cidr, 2, 2, 2)
+  database_private_subnets_cidrs_per_availability_zone = {
+    for k, v in local.availability_zones_names :
+    v => { name : v, id : local.availability_zones_ids[k], subnet : local.database_private_subnet_cidrs[k] }
+  }
+
+}

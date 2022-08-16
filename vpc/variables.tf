@@ -8,14 +8,20 @@ variable "jenkins_role_arn" {
   default     = ""
 }
 
-# Non-toolkit related variables
 # Base networking variables
 variable "cidr_block" {
   description = "Initial CIDR used for the VPC"
-  default     = ""
+  default     = "10.0.0.0/16"
 }
 
 variable "vpc_name" {
   description = "Name for the VPC"
   default     = "main"
 }
+
+variable "internet_gateway_name" {
+  description = "Name for the Internet Gateway"
+  default     = "main"
+}
+
+

@@ -38,7 +38,6 @@ aws-terraform-create-s3-backend-rollback:
 	aws s3api delete-bucket --bucket $(TERRAFORM_BUCKET_NAME)
 	aws dynamodb delete-table --table-name $(TERRAFORM_LOCK_TABLE_NAME)
 
-
 terraform-plan-action:
 	$(call terraform-plan-action)
 
@@ -68,3 +67,12 @@ terraform-destroy: terraform-create-workspace
 
 terraform-plan-destroy: terraform-create-workspace
 	terraform plan -destroy ${EXTRA_VARS}
+
+terraform-validate:
+	@cd ${SELF_DIR}
+	terraform fmt -check -recursive -diff
+	terraform validate
+
+terraform-format:
+	@cd ${SELF_DIR}
+	terraform fmt -recursive

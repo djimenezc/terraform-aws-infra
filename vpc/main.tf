@@ -24,10 +24,18 @@ provider "aws" {
 }
 
 resource "aws_vpc" "main" {
-  cidr_block       = "10.0.0.0/16"
+  cidr_block       = var.cidr_block
   instance_tenancy = "default"
 
   tags = {
-    Name = "main"
+    Name = var.vpc_name
+  }
+}
+
+resource "aws_internet_gateway" "main" {
+  vpc_id = aws_vpc.main.id
+
+  tags = {
+    "Name" = var.internet_gateway_name
   }
 }

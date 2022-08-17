@@ -43,3 +43,45 @@ resource "aws_internet_gateway" "main" {
     "Name" = var.internet_gateway_name
   }
 }
+
+resource "aws_subnet" "web" {
+  for_each = local.web_public_subnets_cidrs_per_availability_zone
+
+  vpc_id                  = aws_vpc.main.id
+  availability_zone_id    = each.value.id
+  cidr_block              = each.value.subnet
+  map_public_ip_on_launch = false
+
+  tags = {
+    "Name"                           = "public_web_${each.key}"
+    "nexthink.com/subnet-visibility" = "public"
+  }
+}
+
+resource "aws_subnet" "application" {
+  for_each = local.application_private_subnets_cidrs_per_availability_zone
+
+  vpc_id                  = aws_vpc.main.id
+  availability_zone_id    = each.value.id
+  cidr_block              = each.value.subnet
+  map_public_ip_on_launch = false
+
+  tags = {
+    "Name"                           = "private_application_${each.key}"
+    "nexthink.com/subnet-visibility" = "private"
+  }
+}
+
+resource "aws_subnet" "database" {
+  for_each = local.database_private_subnets_cidrs_per_availability_zone
+
+  vpc_id                  = aws_vpc.main.id
+  availability_zone_id    = each.value.id
+  cidr_block              = each.value.subnet
+  map_public_ip_on_launch = false
+
+  tags = {
+    "Name"                           = "private_database_${each.key}"
+    "nexthink.com/subnet-visibility" = "private"
+  }
+}

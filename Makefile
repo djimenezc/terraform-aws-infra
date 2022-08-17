@@ -62,7 +62,7 @@ terraform-apply: terraform-create-workspace
 	@echo Apply operation run sucessfully
 
 terraform-destroy: terraform-create-workspace
-	terraform destroy -auto-approve ${EXTRA_VARS}
+	terraform destroy -![](docs/3-tier-arch.png)auto-approve ${EXTRA_VARS}
 	@echo Destroy operation run sucessfully
 
 terraform-plan-destroy: terraform-create-workspace
@@ -76,3 +76,6 @@ terraform-validate:
 terraform-format:
 	@cd ${SELF_DIR}
 	terraform fmt -recursive
+
+terraform-console:
+	@terraform console

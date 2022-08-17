@@ -29,10 +29,10 @@ locals {
   availability_zones_names = slice(sort(data.aws_availability_zones.available.names), 0, 3)
 
   web_cidr                 = cidrsubnet(var.cidr_block, 8, 0)
-  web_private_subnet_cidrs = cidrsubnets(local.web_cidr, 2, 2, 2)
-  web_private_subnets_cidrs_per_availability_zone = {
+  web_public_subnet_cidrs = cidrsubnets(local.web_cidr, 2, 2, 2)
+  web_public_subnets_cidrs_per_availability_zone = {
     for k, v in local.availability_zones_names :
-    v => { name : v, id : local.availability_zones_ids[k], subnet : local.web_private_subnet_cidrs[k] }
+    v => { name : v, id : local.availability_zones_ids[k], subnet : local.web_public_subnet_cidrs[k] }
   }
 
   application_cidr                 = cidrsubnet(var.cidr_block, 8, 1)

@@ -3,8 +3,6 @@ SELF_DIR ?= ./
 TERRAFORM_BUCKET_NAME ?= joseph-terraform-remote-state-${AWS_DEFAULT_REGION}
 TERRAFORM_LOCK_TABLE_NAME ?= terraform-locks
 
-TERRAFORM_BUCKET_NAME ?= joseph-terraform-remote-state-${AWS_DEFAULT_REGION}
-TERRAFORM_LOCK_TABLE_NAME ?= terraform-locks
 export KEY_NAME ?= terraform.tfstate
 
 TERRAFORM_ADDONS_DIR ?= .terraform/addons
@@ -62,7 +60,7 @@ terraform-apply: terraform-create-workspace
 	@echo Apply operation run sucessfully
 
 terraform-destroy: terraform-create-workspace
-	terraform destroy -![](docs/3-tier-arch.png)auto-approve ${EXTRA_VARS}
+	terraform destroy -auto-approve ${EXTRA_VARS}
 	@echo Destroy operation run sucessfully
 
 terraform-plan-destroy: terraform-create-workspace
